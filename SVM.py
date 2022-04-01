@@ -24,13 +24,13 @@ from sklearn.svm import SVR
 def smape(A, F):
     return 100/len(A) * np.sum(2 * np.abs(F - A) / (np.abs(A) + np.abs(F)))
 
-df3 = pd.read_csv('C:/Users/Malek/Desktop/Policy Transport/Github/Data/stop_times.txt', error_bad_lines=False, low_memory=False)
-df4 = pd.read_csv('C:/Users/Malek/Desktop/Policy Transport/Github//Data/Stops.txt', error_bad_lines=False, low_memory=False)
-df1 = pd.read_csv('C:/Users/Malek/Desktop/Policy Transport/Github//Data/Vehicle_Update.csv', error_bad_lines=False, low_memory=False)
-df2 = pd.read_csv('C:/Users/Malek/Desktop/Policy Transport/Github//Data/Trip_Update.csv', error_bad_lines=False, low_memory=False)
+df3 = pd.read_csv('/Data/stop_times.txt', error_bad_lines=False, low_memory=False)
+df4 = pd.read_csv('/Data/Stops.txt', error_bad_lines=False, low_memory=False)
+df1 = pd.read_csv('/Data/Vehicle_Update.csv', error_bad_lines=False, low_memory=False)
+df2 = pd.read_csv('/Data/Trip_Update.csv', error_bad_lines=False, low_memory=False)
 
-df5 = pd.read_excel('C:/Users/Malek/Desktop/Policy Transport/Github/Data/Weather.xlsx',sheet_name=0)
-df6 = pd.read_excel('C:/Users/Malek/Desktop/Policy Transport/Github/Data/Patronage_Proceeded.xlsx',sheet_name=0)
+df5 = pd.read_excel('/Data/Weather.xlsx',sheet_name=0)
+df6 = pd.read_excel('/Data/Patronage_Proceeded.xlsx',sheet_name=0)
 
 df3['trip_id'] = df3['trip_id'].astype(str)
 data = pd.merge(df2, df1, on=['timestamp', 'tripID', 'stopSequence']).merge(df3, left_on=['tripID', 'stopSequence'], right_on=['trip_id', 'stop_sequence'])
