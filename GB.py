@@ -24,10 +24,10 @@ from sklearn.ensemble import RandomForestRegressor
 def smape(A, F):
     return 100/len(A) * np.sum(2 * np.abs(F - A) / (np.abs(A) + np.abs(F)))
 
-df3 = pd.read_csv('C:/Users/Malek/Desktop/Policy Transport/Github/Data/stop_times.txt', error_bad_lines=False, low_memory=False)
-df4 = pd.read_csv('C:/Users/Malek/Desktop/Policy Transport/Github//Data/Stops.txt', error_bad_lines=False, low_memory=False)
-df1 = pd.read_csv('C:/Users/Malek/Desktop/Policy Transport/Github//Data/Vehicle_Update.csv', error_bad_lines=False, low_memory=False)
-df2 = pd.read_csv('C:/Users/Malek/Desktop/Policy Transport/Github//Data/Trip_Update.csv', error_bad_lines=False, low_memory=False)
+df3 = pd.read_csv('/Data/stop_times.txt', error_bad_lines=False, low_memory=False)
+df4 = pd.read_csv('/Data/Stops.txt', error_bad_lines=False, low_memory=False)
+df1 = pd.read_csv('/Data/Vehicle_Update.csv', error_bad_lines=False, low_memory=False)
+df2 = pd.read_csv('/Data/Trip_Update.csv', error_bad_lines=False, low_memory=False)
 
 df5 = pd.read_excel('C:/Users/Malek/Desktop/Policy Transport/Github/Data/Weather.xlsx',sheet_name=0)
 df6 = pd.read_excel('C:/Users/Malek/Desktop/Policy Transport/Github/Data/Patronage_Proceeded.xlsx',sheet_name=0)
