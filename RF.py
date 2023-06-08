@@ -11,7 +11,6 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import sklearn.preprocessing 
 from sklearn import preprocessing
-from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.linear_model import LinearRegression
 from sklearn import linear_model
 from sklearn import metrics
@@ -24,89 +23,60 @@ from sklearn.ensemble import RandomForestRegressor
 def smape(A, F):
     return 100/len(A) * np.sum(2 * np.abs(F - A) / (np.abs(A) + np.abs(F)))
 
-df3 = pd.read_csv('/Data/stop_times.txt', error_bad_lines=False, low_memory=False)
-df4 = pd.read_csv('/Data/Stops.txt', error_bad_lines=False, low_memory=False)
-df1 = pd.read_csv('/Data/Vehicle_Update.csv', error_bad_lines=False, low_memory=False)
-df2 = pd.read_csv('/Data/Trip_Update.csv', error_bad_lines=False, low_memory=False)
-
-df5 = pd.read_excel('/Data/Weather.xlsx',sheet_name=0)
-df6 = pd.read_excel('/Data/Patronage_Proceeded.xlsx',sheet_name=0)
-
-df3['trip_id'] = df3['trip_id'].astype(str)
-data = pd.merge(df2, df1, on=['timestamp', 'tripID', 'stopSequence']).merge(df3, left_on=['tripID', 'stopSequence'], right_on=['trip_id', 'stop_sequence'])
-data.iloc[:,7] = pd.to_datetime(data.iloc[:,7], format="%m/%d/%Y %I:%M:%S %p")
-data['Dates'] = pd.to_datetime(data.iloc[:,7]).dt.date
-data['Dates'] = pd.to_datetime(data['Dates'])
-data['Time'] = pd.to_datetime(data.iloc[:,7]).dt.time
-data['Hour'] = pd.to_datetime(data.iloc[:,7]).dt.hour
-data['Minute'] = pd.to_datetime(data.iloc[:,7]).dt.minute
-data['weekday'] = data.iloc[:,7].dt.dayofweek
-data["HR"] =  data["weekday"].astype(str)  + data["Hour"].astype(str)  + data["Minute"].astype(str) 
-data["HR"]  = data["HR"].astype(int)
-
-print("Drop")
-print(data["HR"])
-
-print(data['Dates'] == datetime(1970, 1, 1))
-data = pd.merge(data, df5, left_on=['Dates'], right_on=['Date'])
+data = pd.read_excel('Sydney2.xlsx',sheet_name=0)
+Weather = pd.read_excel('Weather-infor.xlsx',sheet_name=0)
 
 
-df6.index = pd.IntervalIndex.from_arrays(df6['Init (weekday+time)'],df6['End (weekday+time)'],closed='both')
-data['weekday-time'] = data['HR'].apply(lambda x : data.iloc[data.index.get_loc(x)]['HR'])
-data = data.sort_values(by='Dates',ascending=True)
-#data.to_excel("data3.xlsx") 
+                        
 
-#data['Dates2'] = pd.to_datetime(data.iloc[:,4]).dt.date
-#data = data.drop(data.index[data['Dates2'] == pd.Timestamp(1970,1,1)])
 
-print(data['Dates'])
-
+data = pd.merge(data, Weather, left_on=['Vehicle Trip Start Date'],  right_on=['Date'])
+data.to_excel("data3.xlsx")    
+feature_cols1 = [0, 2,3,  4, 5, 6, 7, 8, 9, 10,  11, 12, 13, 14, 15, 16, 17, 18]
+print("aaaa")
+#print(Weather)
 for col in data.columns:
     print(col)
-
-print(data)
-
-#data.to_excel("data.xlsx") 
-#data= pd.read_excel("data.xlsx")
-#def get_dataframe(data):
-#    df = data
-
-    
-feature_cols1 = [1, 7,  11, 16, 17, 18, 22, 23, 24, 25, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46]
 class_cols = [2]
 
-data.iloc[:,9] = data.iloc[:,9].astype(str).str.replace(',', '')
-data.iloc[:,1] = label_encoder.fit_transform(data.iloc[:,1]).astype('float64')
-for i in range(3, 8):
-    data.iloc[:,i] = label_encoder.fit_transform(data.iloc[:,i]).astype('float64')
-for i in range(10, 48):
-    data.iloc[:,i] = label_encoder.fit_transform(data.iloc[:,i]).astype('float64')
-
-X = data.iloc[:, feature_cols1]
+data.iloc[:,7] = pd.to_datetime(data.iloc[:,7], format="%Y%m%d ")
+data.iloc[:,6] = pd.to_datetime(data.iloc[:,6], format="%H:%M:%S")
+data['Hour'] = pd.to_datetime(data.iloc[:,6]).dt.hour
+#data['Minute'] = pd.to_datetime(data.iloc[:,7]).dt.minute
+data['weekday'] = data.iloc[:,7].dt.dayofweek
+#data.iloc[:,9] = data.iloc[:,9].astype(str).str.replace(',', '')
+data.iloc[:,0] = label_encoder.fit_transform(data.iloc[:,0]).astype('float64')
+data.iloc[:,4] = label_encoder.fit_transform(data.iloc[:,4]).astype('float64')
+data.iloc[:,5] = label_encoder.fit_transform(data.iloc[:,5]).astype('float64')
+data.iloc[:,6] = label_encoder.fit_transform(data.iloc[:,6]).astype('float64')
+data.iloc[:,7] = label_encoder.fit_transform(data.iloc[:,7]).astype('float64')
+data.iloc[:,8] = label_encoder.fit_transform(data.iloc[:,8]).astype('float64')
+data.iloc[:,9] = label_encoder.fit_transform(data.iloc[:,9]).astype('float64')
+data.iloc[:,10] = label_encoder.fit_transform(data.iloc[:,10]).astype('float64')
+data.iloc[:,11] = label_encoder.fit_transform(data.iloc[:,11]).astype('float64')
+data.iloc[:,12] = label_encoder.fit_transform(data.iloc[:,12]).astype('float64')
 
 print("feature_cols1")
+X = data.iloc[:, feature_cols1]
 for col in X.columns:
     print(col)
-y = data.iloc[:,2]
+
+
+
+
+y = data.iloc[:,1]
 
 train_pct_index = int(0.8 * len(data.iloc[:, 2]))
 X_train, X_test = X[:train_pct_index], X[train_pct_index:]
 y_train, y_test = y[:train_pct_index], y[train_pct_index:]
 
 
-print('feature_cols1')
-print(X.head())
-
-print(y.head())
 feature_cols1 = label_encoder.fit_transform(feature_cols1).astype('float64')
 y_test = y_test.apply(pd.to_numeric, errors='coerce')
 reg = RandomForestRegressor(max_depth=100, random_state=0)
-reg.fit(X, y)
+reg.fit(X_train, y_train)
 y_pred1 = reg.predict(X_test)
-print("y_pred1")
-print(y_pred1)
-print("y_test")
-print(y_test)
+
 print('R:', r2_score(y_test, y_pred1)) 
 print('Mean Absolute Error:', metrics.mean_absolute_error(y_test, y_pred1))  
 print('Mean Squared Error:', metrics.mean_squared_error(y_test, y_pred1))  
