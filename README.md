@@ -1,7 +1,7 @@
 # Transit-delay-prediction
 
 
-This work demonstrates a practical example of leveraging and merging open data sources to accurately predict transit delays. The corresponding paper, titled 'Predicting Rail Transit Delays with Machine Learning: How to Exploit Open Data Sources,' is currently in progress.
+This work demonstrates a practical example of leveraging and merging open data sources to accurately predict transit delays. The corresponding paper, titled Predicting Rail Transit Delays with Machine Learning: Leveraging Open Data Sources' is currently in progress.
 
 The main code showcases the utilization of various machine learning methods, including support vector machines (with feature selection and parameter tuning), random forest, gradient boosting, deep neural networks, and linear regression, for transit delay prediction.
 
