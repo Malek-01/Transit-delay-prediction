@@ -11,4 +11,4 @@ The 'plot' folder provides graphical representations comparing real and predicte
 
 For the merging process, the 'merging' folder contains relevant files, and the resulting file, 'data.xlsx,' is available in the release.
 
-To enhance the assessment of features influencing delays, two additional case studies have been included.
+To enhance the assessment of features influencing delays, two additional case studies have been included, notably for Dublin and Sydney cities.
