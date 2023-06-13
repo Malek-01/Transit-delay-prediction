@@ -1,22 +1,23 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Jul  6 20:10:45 2021
 
 @author: Malek
 """
-
+from sklearn.model_selection import RepeatedKFold
+from sklearn.model_selection import GridSearchCV
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import sklearn.preprocessing 
 from sklearn import preprocessing
-from sklearn.ensemble import GradientBoostingRegressor
-from sklearn.linear_model import LinearRegression
-from sklearn import linear_model
+from sklearn.svm import SVR
+from sklearn.feature_selection import SelectKBest, mutual_info_regression
+from sklearn.feature_selection import SelectFromModel
+from sklearn.feature_selection import SelectKBest
+from sklearn.feature_selection import chi2
 from sklearn import metrics
 from sklearn.metrics import r2_score
-import time
 from datetime import datetime
 label_encoder = preprocessing.LabelEncoder()
 from sklearn.svm import SVR
@@ -93,33 +94,22 @@ train_pct_index = int(0.8 * len(data.iloc[:, 2]))
 X_train, X_test = X[:train_pct_index], X[train_pct_index:]
 y_train, y_test = y[:train_pct_index], y[train_pct_index:]
 
-
 print('feature_cols1')
 print(X.head())
 
 print(y.head())
 feature_cols1 = label_encoder.fit_transform(feature_cols1).astype('float64')
 y_test = y_test.apply(pd.to_numeric, errors='coerce')
-clf = SVR(kernel='rbf', C=100, gamma='auto', epsilon=0.1) # Linear Kernel
-clf.fit(X, y)
-y_pred1 = reg.predict(X_test)
-print("y_pred1")
-print(y_pred1)
-print("y_test")
-print(y_test)
-print('R:', r2_score(y_test, y_pred1)) 
-print('Mean Absolute Error:', metrics.mean_absolute_error(y_test, y_pred1))  
-print('Mean Squared Error:', metrics.mean_squared_error(y_test, y_pred1))  
-print('Root Mean Squared Error:', np.sqrt(metrics.mean_squared_error(y_test, y_pred1)))
-print('sMAPE:', smape(np.transpose(y_pred1),  y_test)) 
-l = list(range(len(y_pred1)))
-plt.figure(figsize=(16, 8))
-plt.plot(l, y_pred1, 'g-', label = 'LR')
-plt.plot(l, y_test, 'b-', label = 'Real')
-y_pred2 = pd.DataFrame (y_pred1)
-with pd.ExcelWriter('Predicted_values.xlsx', engine='openpyxl', mode='a') as writer:
-    y_pred2.to_excel(writer,sheet_name='RF')
-plt.xlabel('Sample'); plt.ylabel('Delay (in seconds)'); plt.title('Prediction of early/late arrivals of transit in the test set')
-plt.legend();
-#plt.savefig('prediction.png')
-#, low_memory=False
+
+print(y.head())
+parameters = [{'C': [1, 10, 100, 1000], 
+                'kernel': ['sigmoid','rbf','poly'], 
+                'gamma': [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]}]
+feature_cols1 = label_encoder.fit_transform(feature_cols1).astype('float64')
+model = SVR(kernel='rbf', C=100, gamma='auto', epsilon=0.1) # Linear Kernel
+cv = RepeatedKFold(n_splits=5, n_repeats=1, random_state=1)
+search = GridSearchCV(model, parameters, scoring='neg_mean_absolute_error', n_jobs=-1, cv=cv)
+result = search.fit(X, y)
+print('Best Score: %s' % result.best_score_)
+print('Best Hyperparameters: %s' % result.best_params_)
+
