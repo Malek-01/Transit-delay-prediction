@@ -5,7 +5,7 @@ This work demonstrates a practical example of leveraging and merging open data s
 
 The main code showcases the utilization of various machine learning methods, including support vector machines (with feature selection and parameter tuning), random forest, gradient boosting, deep neural networks, and linear regression, for transit delay prediction.
 
-The case study focuses on the Canberra Rail System, and the necessary data can be found in the 'Data' folder. Additionally, the release includes the 'Large data' folder, which contains the substantial 'Trip_Update' and 'Vehicle_Update' files.
+The case study focuses on the Canberra Rail System, and the necessary data can be found in the 'Data' folder. Additionally, the release includes the 'Large data' folder, which contains the substantial 'Trip_Update' and 'Vehicle_Update' files (https://github.com/Malek-01/Transit-delay-prediction/releases/tag/Transit).
 
 The 'plot' folder provides graphical representations comparing real and predicted values for different algorithms. It also includes a side-by-side bar graph illustrating three evaluation metrics: mean absolute error (MAE), root mean square error (RMSE), and symmetric mean absolute percentage error (sMAPE).
 
