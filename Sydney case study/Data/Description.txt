@@ -1,4 +1,0 @@
-
-This data has two parts:
-  Sydney2.xlsx presents the GTFS data.
-  Weather-infor.xlsx presents the weather information.
