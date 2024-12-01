@@ -18,43 +18,64 @@ def smape(A, F):
     return 100 / len(A) * np.sum(2 * np.abs(F - A) / (np.abs(A) + np.abs(F)))
 
 # Load datasets
-data = pd.read_excel('Sydney2.xlsx', sheet_name=0)
-weather = pd.read_excel('Weather-infor.xlsx', sheet_name=0)
+df3 = pd.read_csv('/Data/stop_times.txt', low_memory=False)
+df4 = pd.read_csv('/Data/Stops.txt', low_memory=False)
+df1 = pd.read_csv('/Data/Vehicle_Update.csv', low_memory=False)
+df2 = pd.read_csv('/Data/Trip_Update.csv', low_memory=False)
+df5 = pd.read_excel('/Data/Weather.xlsx', sheet_name=0)
+df6 = pd.read_excel('/Data/Patronage_Proceeded.xlsx', sheet_name=0)
 
-# Merge data with weather information
-data = pd.merge(data, weather, left_on=['Vehicle Trip Start Date'], right_on=['Date'])
-data.to_excel("data3.xlsx")  
+# Merge datasets
+try:
+    df3['trip_id'] = df3['trip_id'].astype(str)
+    data = (
+        pd.merge(df2, df1, on=['timestamp', 'tripID', 'stopSequence'])
+        .merge(df3, left_on=['tripID', 'stopSequence'], right_on=['trip_id', 'stop_sequence'])
+    )
+    data = pd.merge(data, df5, left_on=['Dates'], right_on=['Date'], how='inner')
+except Exception as e:
+    print(f"Error merging datasets: {e}")
 
-# Define feature columns
-feature_cols1 = [0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
+# Feature engineering
+try:
+    data['timestamp'] = pd.to_datetime(data['timestamp'], errors='coerce')
+    data['Hour'] = data['timestamp'].dt.hour
+    data['weekday'] = data['timestamp'].dt.dayofweek
+except Exception as e:
+    print(f"Error during feature engineering: {e}")
 
-# Convert relevant columns to datetime and extract features
-data.iloc[:, 7] = pd.to_datetime(data.iloc[:, 7], format="%Y%m%d")
-data.iloc[:, 6] = pd.to_datetime(data.iloc[:, 6], format="%H:%M:%S")
-data['Hour'] = pd.to_datetime(data.iloc[:, 6]).dt.hour
-data['weekday'] = data.iloc[:, 7].dt.dayofweek
+# Handle patronage intervals
+try:
+    df6.index = pd.IntervalIndex.from_arrays(df6['Init (weekday+time)'], df6['End (weekday+time)'], closed='both')
+    data['weekday-time'] = data['HR'].apply(lambda x: x if x in df6.index else None)
+except Exception as e:
+    print(f"Error handling patronage intervals: {e}")
 
-# Label encoding for categorical features
+# Encode categorical variables
 label_encoder = preprocessing.LabelEncoder()
-categorical_columns = [0, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-for col in categorical_columns:
-    data.iloc[:, col] = label_encoder.fit_transform(data.iloc[:, col]).astype('float64')
+categorical_cols = ['trip_id', 'stop_id']  # Add other relevant categorical columns
+for col in categorical_cols:
+    try:
+        data[col] = label_encoder.fit_transform(data[col].astype(str))
+    except Exception as e:
+        print(f"Error encoding column {col}: {e}")
 
-# Prepare features (X) and target (y)
+# Define features and target variable
+feature_cols1 = [1, 7, 11, 16, 17, 18, 22, 23, 24, 25, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]
 X = data.iloc[:, feature_cols1]
-y = data.iloc[:, 1]
+y = data.iloc[:, 2]
 
 # Train-test split
 train_pct_index = int(0.8 * len(data))
 X_train, X_test = X[:train_pct_index], X[train_pct_index:]
 y_train, y_test = y[:train_pct_index], y[train_pct_index:]
 
-# Random Forest Regressor
+# Model training and evaluation
 reg = RandomForestRegressor(max_depth=100, random_state=0)
 reg.fit(X_train, y_train)
 y_pred = reg.predict(X_test)
 
-# Evaluation metrics
+# Metrics
 print('R2 Score:', r2_score(y_test, y_pred))
 print('Mean Absolute Error:', mean_absolute_error(y_test, y_pred))
 print('Mean Squared Error:', mean_squared_error(y_test, y_pred))
@@ -66,6 +87,15 @@ plt.figure(figsize=(16, 8))
 plt.plot(range(len(y_pred)), y_pred, 'g-', label='Predicted')
 plt.plot(range(len(y_test)), y_test, 'b-', label='Actual')
 plt.xlabel('Sample')
+plt.ylabel('Delay (in seconds)')
+plt.title('Prediction of Transit Delays')
+plt.legend()
+plt.show()
+
+# Save predictions to Excel
+y_pred_df = pd.DataFrame(y_pred, columns=['Predicted'])
+y_pred_df.to_excel('Predicted_values.xlsx', index=False, sheet_name='RF')
+
 plt.ylabel('Delay (in seconds)')
 plt.title('Prediction of Transit Delays')
 plt.legend()
