@@ -14,3 +14,21 @@ For the merging process, the 'merging' folder contains relevant files, and the r
 The codes to be executed are located in the main code, namely the following files: SVM-FS.py, GB.py, RF.py, DNN.py, and LR.py.
 
 To enhance the assessment of features influencing delays, two additional case studies have been included, notably for Dublin and Sydney cities. The information about them are available in Dublin case study and Sydney case study, respectively.
+
+## Disclaimer
+
+### Computational Results
+The computational results in the paper were obtained based on initial experiments. During further review, it was identified that:
+1. **Support Vector Regression (SVR):** 
+   The code in the paper mistakenly fit the regression model on raw data instead of the training data. Correcting this issue may result in different values compared to those reported in the paper.
+2. **Data Completeness:**
+   The Canberra dataset originally contained several instances of missing data, including wind direction, wind speed, and pressure. After merging the data, additional missing values may appear, affecting reproducibility. Users are encouraged to handle these missing values with appropriate preprocessing techniques.
+
+### Reproducibility
+While we have shared code and data, differences in results may arise due to:
+- Variations in data preprocessing or imputation methods.
+- Changes in software libraries or versions.
+- Random state initialization.
+
+If you encounter discrepancies or have further questions, please reach out to us for clarification.
+
