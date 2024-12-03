@@ -120,5 +120,3 @@ print(importance)
 # summarize feature importance
 for i,v in enumerate(importance):
 	print('Feature: %0d, Score: %.5f' % (i,v))  
-#plt.savefig('prediction.png')
-#, low_memory=False
