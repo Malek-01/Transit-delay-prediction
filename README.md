@@ -15,6 +15,12 @@ The codes to be executed are located in the main code, namely the following file
 
 To enhance the assessment of features influencing delays, two additional case studies have been included, notably for Dublin and Sydney cities. The information about them are available in Dublin case study and Sydney case study, respectively.
 
+## Contact
+
+For any questions or inquiries, please contact the main contributor:
+
+- Malek Sarhani: malek.sarhani.aui@gmail.com or m.sarhani@aui.ma
+
 ## Disclaimer
 
 ### Computational Results
