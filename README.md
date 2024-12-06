@@ -28,7 +28,7 @@ The computational results in the paper were obtained based on initial experiment
 1. **Support Vector Regression (SVR):** 
    The code in the paper mistakenly fit the regression model on raw data instead of the training data. Correcting this issue may result in different values compared to those reported in the paper.
 2. **Data Completeness:**
-   The Canberra dataset originally contained several instances of missing data, including wind direction, wind speed, and pressure. After merging the data, additional missing values may appear, affecting reproducibility. Users are encouraged to handle these missing values with appropriate preprocessing techniques.
+   The Canberra dataset originally contained several instances of missing data. We aimed to handle these missing values using appropriate preprocessing techniques.
 
 ### Reproducibility
 While we have shared code and data, differences in results may arise due to:
