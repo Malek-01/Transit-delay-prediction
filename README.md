@@ -31,10 +31,10 @@ The computational results in the paper were obtained based on initial experiment
    The Canberra dataset originally contained several instances of missing data. We aimed to handle these missing values using appropriate preprocessing techniques.
 
 ### Reproducibility
-While we have shared code and data, differences in results may arise due to:
+While we have shared the code and data, differences in results may arise due to factors such as:
 - Variations in data preprocessing or imputation methods.
 - Changes in software libraries or versions.
 - Random state initialization.
 
-If you encounter discrepancies or have further questions, please reach out to us for clarification.
+If you have further questions, please reach out to us for clarification.
 
