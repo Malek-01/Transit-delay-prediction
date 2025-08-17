@@ -29,7 +29,8 @@ The computational results in the paper were obtained based on initial experiment
    The code in the paper mistakenly fit the regression model on raw data instead of the training data. Correcting this issue may result in different values compared to those reported in the paper.
 2. **Data Completeness:**
    The Canberra dataset originally contained several instances of missing data. We aimed to handle these missing values using appropriate preprocessing techniques.
-   **Note:** Due to a data completeness issue, the public sharing of the dataset has been temporarily suspended until this is fully addressed.
+
+**Note:** Due to that data completeness issue, the public sharing of the dataset has been temporarily suspended until this is fully addressed.
 
 ### Reproducibility
 While we have shared the code and data, differences in results may arise due to factors such as:
